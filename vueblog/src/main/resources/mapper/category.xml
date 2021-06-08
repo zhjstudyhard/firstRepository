@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vueblog.Mapper.CategoryMapper">
+<!--    博客分类-->
+    <resultMap id="postBlogs" type="com.vueblog.pojo.MPost">
+        <id column="id" property="id"></id>
+        <result column="title" property="title"></result>
+        <result column="content" property="content"></result>
+        <result column="created" property="created"></result>
+        <result column="modified" property="modified"></result>
+        <result column="comment_count" property="commentCount"></result>
+        <result column="view_count" property="viewCount"></result>
+        <result column="vote_down" property="voteDown"></result>
+        <result column="vote_up" property="voteUp"></result>
+    </resultMap>
+<!--    博客热议-->
+    <resultMap id="commentBlogs" type="com.vueblog.pojo.MPost">
+        <id column="id" property="id"></id>
+        <result column="title" property="title"></result>
+        <result column="user_id" property="userID"></result>
+        <result column="created" property="created"></result>
+        <result column="comment_count" property="commentCount"></result>
+        <result column="view_count" property="viewCount"></result>
+        <result column="vote_down" property="voteDown"></result>
+        <result column="vote_up" property="voteUp"></result>
+    </resultMap>
+<!--    博客分类-->
+    <select id="categoryBloges" resultType="com.vueblog.VO.postVO">
+           select p.*,
+           u.username as authorName,
+           c.name as categoryName,
+           p.user_id as authorId
+           from m_post p
+           left join m_user u on p.user_id = u.id
+           left join m_category c on p.category_id = c.id
+    </select>
+    <!--查询一周内的发表的博客-->
+    <select id="commentBlogs" resultType="com.vueblog.pojo.MPost">
+        select *
+        from m_post where
+        created > DATE_SUB(NOW(),INTERVAL 7 DAY)
+    </select>
+<!--    批量更新博客阅读量-->
+    <update id="batchUpdateViewCounts" parameterType="java.util.List">
+
+        <foreach collection="list" item="post" index="index" open="" close="" separator=";">
+            update m_post
+            <set>
+                view_count=#{post.viewCount}
+            </set>
+            where id = #{post.id}
+        </foreach>
+    </update>
+<!--   根据博客id批量查询博客-->
+    <select id="selectBatchMpost" resultType="com.vueblog.pojo.MPost" parameterType="java.util.List">
+        select * from m_post
+        where id in
+        <foreach collection="list" index="index" open="(" separator=","
+                 close=")" item="id">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

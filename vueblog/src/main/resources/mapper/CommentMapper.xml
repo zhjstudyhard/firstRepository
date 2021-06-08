@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vueblog.Mapper.CommentMapper">
+    <sql id="params">
+        <!--        parent_id,vote_up,vote_down,level,-->
+        parent_id,content,post_id,user_id,created
+    </sql>
+    <sql id="insert_params">
+        <!--        #{voteUp},#{voteDown},#{level},#{parentId}-->
+        #{parentId},#{content},#{postId},#{userId},#{created}
+    </sql>
+    <!--    查看博客评论-->
+    <select id="blogComment" resultType="com.vueblog.VO.CommentVO">
+        select
+        m.*,
+        m.id as CommentId,
+        mu.avatar as authorAvatar,
+        mu.username as username,
+        m_user.username as parentUsername
+        from m_comment m
+        left join m_user mu on mu.id = m.user_id
+        left join m_user on m_user.id = m.parent_id
+        where
+        post_id = #{blogId}
+        order by  m.created desc
+        limit #{pageNum},#{pageSize}
+    </select>
+    <!--    查看当前博客的评论数量-->
+    <select id="countComment" resultType="java.lang.Integer">
+        select count(*) from m_comment where post_id = #{blogId}
+    </select>
+
+    <!--    个人回复评论-->
+    <insert id="relyComment" parameterType="com.vueblog.pojo.Comment" keyProperty="id" useGeneratedKeys="true">
+        insert into m_comment (<include refid="params">
+    </include>) values (<include refid="insert_params">
+    </include>)
+    </insert>
+
+<!--    删除博客评论-->
+    <delete id="delComment">
+        delete from m_comment where id = #{CommentId}
+    </delete>
+</mapper>

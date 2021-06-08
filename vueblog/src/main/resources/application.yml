@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    username: root
+    password: zhj123459
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/vueblog?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&allowMultiQueries=true
+    type: com.mchange.v2.c3p0.ComboPooledDataSource
+  redis:
+    host: 192.168.160.135
+    port: 6379
+    database: 0
+    password:
+  application:
+    name: vueBlog-rabbitmq
+  rabbitmq:
+    host: 192.168.160.135
+    port: 5672
+    username: ems
+    password: ems
+    virtual-host: /ems
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml

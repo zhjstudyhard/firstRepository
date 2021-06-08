@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vueblog.Mapper.MessageMapper">
+    <sql id="param">
+        #{fromUserId},#{toUserId},#{postId},#{commentId},#{content},#{type},#{status},#{created}
+    </sql>
+    <sql id="insert_param">
+        from_user_id,to_user_id,post_id,comment_id,content,type,status,created
+    </sql>
+<!--    查询未读消息-->
+    <select id="noReadMessage" resultType="java.lang.Integer">
+        select count(*) from m_user_message where status = 0 and to_user_id = #{userId}
+    </select>
+    <!--    保存通知信息-->
+    <insert id="save" parameterType="com.vueblog.pojo.UserMessage">
+        insert into m_user_message(<include refid="insert_param">
+    </include>) values (<include refid="param">
+    </include>)
+    </insert>
+</mapper>

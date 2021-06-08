@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vueblog.Mapper.PostMapper">
+    <sql id="blogParam">
+        title,content,created,category_id,user_id,vote_up,vote_down,view_count,comment_count
+    </sql>
+    <sql id="blog">
+        #{title},#{content},#{created},#{categoryID},#{userID},#{voteUp},#{voteDown},#{viewCount},#{commentCount}
+    </sql>
+    <sql id="collectionInsert">
+        #{id},#{userId}, #{postId},#{postUserId},#{created},#{modified}
+        <!--        ,#{commentCount},#{voteUp},#{voteDown}-->
+    </sql>
+    <sql id="collectionParam">
+        id,user_id,post_id,post_user_id,created,modified
+        <!--        ,comment_count,vote_up,vote_down-->
+    </sql>
+    <!--    更新博客主要信息-->
+    <sql id="update_blog">
+        <if test="#{modified != null}">
+            modified = #{modified},
+        </if>
+        <if test="#{categoryID != null}">
+            category_id = #{categoryID},
+        </if>
+        <if test="#{title != null}">
+            title = #{title},
+        </if>
+        <if test="#{content != null}">
+            content = #{content}
+        </if>
+    </sql>
+
+    <!--    更新博客的评论量-->
+    <sql id="update_blogCommentCount">
+        <if test="#{commentCount != null}">
+            comment_count = #{commentCount}
+        </if>
+    </sql>
+    <!--    查看置顶的博客-->
+    <select id="levelBlogs" resultType="com.vueblog.VO.postVO">
+        select
+        p.*,
+        u.username as authorName,
+        c.name as categoryName
+        from m_post p
+        left join m_category c on p.category_id = c.id
+        left join m_user u on p.category_id = u.id
+        where level = 1
+    </select>
+    <!--    查看博客详情-->
+    <select id="detailBlogs" resultType="com.vueblog.VO.postVO">
+        select
+        p.*,
+        u.username as authorName,
+        c.name as categoryName,
+        p.user_id as authorId
+        from m_post p
+        left join m_category c on p.category_id = c.id
+        left join m_user u on p.category_id = u.id
+        where p.id = #{BlogId}
+    </select>
+    <!--    查看博客信息-->
+    <select id="selectOne" resultType="com.vueblog.pojo.MPost">
+        select * from m_post where id = #{blogId}
+    </select>
+<!--    查看postVO信息-->
+<!--    <select id="selectPostVo" resultType="com.vueblog.VO.postVO">-->
+<!--        select * from m_post where id = #{blogId}-->
+<!--    </select>-->
+    <!--    判断博客是否被收藏-->
+    <select id="getCollectionAssert" resultType="com.vueblog.pojo.Collection">
+        select * from m_user_collection where post_id = #{blogId} and user_id = #{userId}
+    </select>
+    <!--    发表博客-->
+    <insert id="blogsEdits" parameterType="com.vueblog.pojo.MPost" keyProperty="id" useGeneratedKeys="true">
+        insert into m_post (<include refid="blogParam">
+    </include>) values(<include refid="blog">
+    </include>)
+    </insert>
+    <!--    博客置顶-->
+    <update id="setLevel">
+        update m_post set level = 1
+        where id = #{BlogId}
+    </update>
+    <!--    删除博客-->
+    <delete id="delBlogs" parameterType="java.lang.Integer">
+        delete from m_post where id = #{id}
+    </delete>
+    <!--更新博客-->
+    <update id="updateBlogs" parameterType="com.vueblog.pojo.MPost">
+        update m_post set <include refid="update_blog">
+    </include> where id = #{id}
+    </update>
+    <!--    更新博客的评论数量-->
+    <update id="updateCommentCount">
+        update m_post set <include refid="update_blogCommentCount">
+    </include> where id = #{id}
+    </update>
+    <!--    收藏博客-->
+    <insert id="collectionBlogs" parameterType="com.vueblog.VO.CollectionVO">
+        insert into m_user_collection (<include refid="collectionParam">
+    </include>) values (<include refid="collectionInsert">
+    </include>)
+    </insert>
+</mapper>
