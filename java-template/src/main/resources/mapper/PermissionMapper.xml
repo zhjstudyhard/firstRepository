@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xydata.mapper.PermissionMapper">
+    <select id="selectPermissions" resultType="java.lang.String">
+        SELECT
+        p.permcode
+<!--        p.permname,-->
+<!--        p.permtype-->
+        FROM
+        t_aaa_user u
+        LEFT JOIN t_aaa_userrole ur ON u.id = ur.userid
+        LEFT JOIN t_aaa_role r ON ur.roleid = r.id
+        LEFT JOIN t_aaa_rolepermission rp ON r.id = rp.roleid
+        LEFT JOIN t_aaa_permission p ON rp.permid = p.id
+        WHERE
+        r.isdeleted = 0
+        AND u.id = #{userId}
+        AND p.permcode is NOT NULL
+    </select>
+</mapper>

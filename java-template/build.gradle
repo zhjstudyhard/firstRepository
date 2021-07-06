@@ -1,0 +1,48 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'cn.xydata'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+//    mavenCentral()
+    maven { url "http://112.16.158.6:18081/repository/maven-public/"}
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter:2.1.4.RELEASE'
+    implementation 'cn.xydata:xydata-upload-spring-boot-starter:0.0.7'
+//    implementation group: 'cn.xydata',name: 'xydata-aaa-spring-boot-starter',version: '2.0.19'
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.4.RELEASE'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.1.4.RELEASE'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.1.4.RELEASE'
+//    implementation 'org.springframework.boot:spring-boot-starter-security:2.1.4.RELEASE'
+
+    compile ('tk.mybatis:mapper-spring-boot-starter:2.1.4') {
+        exclude group: 'javax.persistence'
+    }
+
+    // https://mvnrepository.com/artifact/com.alicp.jetcache/jetcache-starter-redis
+    compile group: 'com.alicp.jetcache', name: 'jetcache-starter-redis-lettuce', version: '2.6.0.M3'
+
+    compile group: 'com.github.pagehelper', name: 'pagehelper-spring-boot-starter', version: '1.2.9'
+
+    compile group: 'org.apache.commons', name: 'commons-pool2', version: '2.8.0'
+
+    implementation 'cn.xydata:common:2.0.5'
+
+//    implementation 'cn.xydata:securitystarter:0.0.19'
+    implementation 'cn.xydata:securitystarter:1.0.9'
+
+    runtimeOnly group: 'mysql', name: 'mysql-connector-java', version: '5.1.47'
+
+    // compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: '2.1.4.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis
+    compile group: 'org.springframework.data', name: 'spring-data-redis', version: '2.1.4.RELEASE'
+}

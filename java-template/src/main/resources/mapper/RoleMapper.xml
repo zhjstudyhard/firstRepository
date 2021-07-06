@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xydata.mapper.RolesMapper">
+    <select id="selectRoles" resultType="java.lang.String">
+        SELECT
+        r.rolecode
+<!--        r.rolename-->
+        FROM
+        t_aaa_user u
+        LEFT JOIN t_aaa_userrole ur ON u.id = ur.userid
+        LEFT JOIN t_aaa_role r ON ur.roleid = r.id
+        WHERE
+        r.isdeleted = 0
+        AND u.id = #{userId}
+        AND r.rolecode is NOT NULL
+    </select>
+</mapper>

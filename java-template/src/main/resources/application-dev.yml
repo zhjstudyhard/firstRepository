@@ -1,0 +1,89 @@
+spring:
+  application:
+    name: cn.xydata.test
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: root
+    url: jdbc:mysql://172.16.1.251:3306/test0?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: DatabookHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#  redis:
+#    database: 0
+#    password: ''
+#    timeout: 5000
+#    cluster:
+#      nodes:
+#        - 172.16.1.248:6379
+#      max-redirects: 3
+  redis:
+    host: 192.168.160.135
+    port: 6379
+    database: 0
+    password:
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1
+        min-idle: 0
+  rabbitmq:
+    host: 172.16.1.248
+    password: guest
+    port: 5672
+    username: guest
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:/mapper/*.xml
+server:
+  port: 8089
+xydata:
+  file:
+    path: D:/workspace/j      ava/test/file/
+    prefixUri: http://127.0.0.1:8089/api
+    tmpPath: D:/workspace/java/test/file/
+security:
+  interface:
+    encrypt: true
+    public-key: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCGXsxHtxVl/rcvs4ezSOlfAOswLv1vlx6TQxyR3DOaQ2Fi0C4UvtdVX3mqjzhtjqaWIFlgq5C4BrjArFzCA0HR+FOFDxsnKSKimv3k2gaYCWgbOAQLShmfe5SfYEbziUOyxyM6CAJvDujLAAWzfyUo1XTQUFFgP5tvD6CIwIZ4OwIDAQAB
+    private-key: MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAIZezEe3FWX+ty+zh7NI6V8A6zAu/W+XHpNDHJHcM5pDYWLQLhS+11VfeaqPOG2OppYgWWCrkLgGuMCsXMIDQdH4U4UPGycpIqKa/eTaBpgJaBs4BAtKGZ97lJ9gRvOJQ7LHIzoIAm8O6MsABbN/JSjVdNBQUWA/m28PoIjAhng7AgMBAAECgYBxdZZ0b8mnx/6STrukzUoRKEtu8h6ZnTb6Dc8P8qm39nFC6JogdkyJEAdB15FEIRHU7hfKItQeL77NIj1orStjkL5b4jFXPl7VQ6EIFRyliVijQWU8GenzO+qvFJsS2DsXv6lvHG5DpNIuBcv1bNxcwedYTgxQKyNEikiul0eaoQJBAMWNdjfwThM/RgkQGD/6niYe39NdOXFO3nvXJ5wdw0M2hz28SivuPk6lCy2c29GlDsYfeAkYvWUVgbyLixu5qKMCQQCuH/DEqEFeZcOlooGCjU9g5L/++gJEiLTHA9qtB5PnprYAi/9w6cTDYiqvb6o8eeLVBB5X8kf7ENwsSB+zjnOJAkB1kDbPGVHNQHVURWC5ClL9SphWt37MwGvEdQjcbhXatOOMyLW3KQOpV6ysS1HBlCGTo/ySJUfolQDtDHoPWNBTAkA+CoVoHKdF8i52uuM4WA87b+X0/LGIJ8l5y6bD1hpeBKl+omM+oRyJnVWmMrxOVgN7cL87CMma7FP2tzAMcyo5AkAWB0aEWgXl/YKCkpnv9hM2E39BDqkKEV206uhcMsX05aVlYrOSHFaaktHjdyxoKW8uES1o9DJ/JxyWriWqM715
+    topic-exchange-name: topicExchangeTest
+    receive-routing-key: topic.testService
+    send-routing-key: topic.testReceiveService
+    queue-name: TestServiceConsumer
+    server-ip: http://127.0.0.1
+    server-port: 8089
+    concurrentConsumers: 10
+    prefetchCount: 10
+logging:
+  level:
+    org.springframework.boot.autoconfigure: ERROR
+#    org.springframework.boot.autoconfigure: debug
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: false
+  local:
+    default:
+      type: linkedhashmap
+      keyConvertor: fastjson
+  remote:
+    default:
+      type: redis.lettuce
+      keyConvertor: fastjson
+      uri:
+        - redis://192.168.160.135:6379
